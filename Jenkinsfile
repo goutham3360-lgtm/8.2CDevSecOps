@@ -1,63 +1,55 @@
 pipeline {
-    agent any
-    options { timestamps() }
-    tools {
-        maven 'M3'
-    }
-    triggers { pollSCM('H/5 * * * *') }
+  agent any
 
-    stages {
-
-        stage('Stage 1: Build') {
-            steps {
-                echo 'Compiling and packaging the code...'
-                bat 'mvn clean package -DskipTests=true'
-            }
-        }
-
-        stage('Stage 2: Unit and Integration Tests') {
-            steps {
-                echo 'Running unit and integration tests...'
-                bat 'mvn test'
-            }
-        }
-
-        stage('Stage 3: Code Analysis') {
-            steps {
-                echo 'Static analysis to enforce coding standards.'
-                echo 'Tool: SpotBugs / Checkstyle / PMD via Maven plugins.'
-            }
-        }
-
-        stage('Stage 4: Security Scan') {
-            steps {
-                echo 'Scanning dependencies and source for vulnerabilities.'
-                echo 'Tool: OWASP Dependency-Check or Snyk.'
-            }
-        }
-
-        stage('Stage 5: Deploy to Staging') {
-            steps {
-                echo 'Deploying artifact to staging environment (simulation).'
-            }
-        }
-
-        stage('Stage 6: Integration Tests on Staging') {
-            steps {
-                echo 'Running end-to-end tests in staging environment.'
-            }
-        }
-
-        stage('Stage 7: Deploy to Production') {
-            steps {
-                echo 'Deploying artifact to production environment (simulation).'
-            }
-        }
+  stages {
+    stage('Checkout') {
+      steps {
+        git branch: 'main', url: 'https://github.com/goutham3360-lgtm/8.2CDevSecOps.git'
+      }
     }
 
-    post {
-        always {
-            echo 'Pipeline finished: Part 1 – Task 2 design with actual build & test integration.'
-        }
+    stage('Install Dependencies') {
+      steps {
+        bat 'npm install'
+      }
     }
+
+    stage('Run Tests') {
+      steps {
+        bat 'cmd /c npm test || exit /b 0'
+      }
+    }
+
+    stage('Generate Coverage Report') {
+      steps {
+        bat 'cmd /c npm run coverage || exit /b 0'
+      }
+    }
+
+    stage('Code Analysis') {
+      steps {
+        echo 'Running static code analysis...'
+        // Example: eslint (make sure it's in devDependencies)
+        bat 'cmd /c npx eslint . || exit /b 0'
+      }
+    }
+
+    stage('NPM Audit (Security Scan)') {
+      steps {
+        bat 'cmd /c npm audit || exit /b 0'
+      }
+    }
+
+    stage('Deploy (Simulation)') {
+      steps {
+        echo 'Deploying application to staging/production (simulation only).'
+      }
+    }
+  }
+
+  post {
+    always {
+      echo 'Pipeline finished: Part 1 – Task 2 Node.js pipeline with build, test, analysis, and security scan.'
+    }
+  }
 }

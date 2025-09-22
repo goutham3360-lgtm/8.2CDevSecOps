@@ -1,7 +1,6 @@
 pipeline {
     agent any
     options { timestamps() }
-
     triggers { pollSCM('H/5 * * * *') }
 
     stages {
@@ -9,16 +8,14 @@ pipeline {
         stage('Stage 1: Build') {
             steps {
                 echo 'Compiling and packaging the code...'
-                // Example: Maven build (can replace with Gradle if required)
-                sh 'mvn clean package -DskipTests=true'
+                bat 'mvn clean package -DskipTests=true'
             }
         }
 
         stage('Stage 2: Unit and Integration Tests') {
             steps {
                 echo 'Running unit and integration tests...'
-                // Run JUnit/Mockito tests with Maven Surefire/Failsafe
-                sh 'mvn test'
+                bat 'mvn test'
             }
         }
 
@@ -26,8 +23,6 @@ pipeline {
             steps {
                 echo 'Static analysis to enforce coding standards.'
                 echo 'Tool: SpotBugs / Checkstyle / PMD via Maven plugins.'
-                // Example: SpotBugs plugin (disabled actual execution for design pipeline)
-                // sh 'mvn spotbugs:check'
             }
         }
 

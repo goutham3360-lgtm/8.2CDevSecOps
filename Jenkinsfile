@@ -1,6 +1,10 @@
 pipeline {
   agent any
 
+  tools {
+    nodejs 'Node'  
+  }
+
   stages {
     stage('Checkout') {
       steps {
@@ -28,8 +32,6 @@ pipeline {
 
     stage('Code Analysis') {
       steps {
-        echo 'Running static code analysis...'
-        // Example: eslint (make sure it's in devDependencies)
         bat 'cmd /c npx eslint . || exit /b 0'
       }
     }

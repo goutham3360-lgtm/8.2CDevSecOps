@@ -1,6 +1,9 @@
 pipeline {
     agent any
     options { timestamps() }
+    tools {
+        maven 'M3'  // use the Maven installation you configured
+    }
     triggers { pollSCM('H/5 * * * *') }
 
     stages {

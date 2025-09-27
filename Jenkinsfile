@@ -1,7 +1,15 @@
 pipeline {
   agent any
-
+  tools {
+    nodejs "Node"  
+  }
   stages {
+    stage('Install Dependencies') {
+      steps {
+        bat 'npm install'  
+      }
+    }
+    
     stage('Checkout') {
       steps {
         git branch: 'main', url: 'https://github.com/goutham3360-lgtm/8.2CDevSecOps.git'

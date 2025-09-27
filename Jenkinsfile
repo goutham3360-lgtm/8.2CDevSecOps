@@ -26,28 +26,10 @@ pipeline {
       }
     }
 
-    stage('Code Analysis') {
-      steps {
-        bat 'cmd /c npx eslint . || exit /b 0'
-      }
-    }
-
-    stage('NPM Audit (Security Scan)') {
+    stage('NPM Audit') {
       steps {
         bat 'cmd /c npm audit || exit /b 0'
       }
-    }
-
-    stage('Deploy (Simulation)') {
-      steps {
-        echo 'Deploying application to staging/production (simulation only).'
-      }
-    }
-  }
-
-  post {
-    always {
-      echo 'Pipeline finished: Part 1 – Task 2 Node.js pipeline with build, test, analysis, and security scan.'
     }
   }
 }
